@@ -1,0 +1,26 @@
+<%
+package view
+
+import "github.com/benbjohnson/bootstrap-ego"
+
+type IndexPage struct {}
+
+func (r *IndexPage) Render(ctx context.Context, w io.Writer) {
+%>
+  <!doctype html>
+    <head>
+      <title>Aerospike Explorer</title>
+      <link rel="stylesheet" href="/static/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
+    </head>
+  <body>
+    <bootstrap:Container>
+      <bootstrap:Row>
+        <div class="col-md-3">
+          <bootstrap:Button Style="danger" Size="lg">Don't click me!</bootstrap:Button>
+        </div>
+      </bootstrap:Row>
+    </bootstrap:Container>
+  </body>
+  </html>
+<% } %>
+
