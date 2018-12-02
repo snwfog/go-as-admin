@@ -1,0 +1,40 @@
+* {
+  font-family: "Inconsolata", sans-serif !important;
+}
+
+.pure-g > div {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.l-box {
+  // padding: 1em;
+}
+
+#menu-hide, #menu-show {
+  cursor: pointer;
+  float: right;
+  text-decoration: underline;
+  margin-left: 10px;
+}
+
+.pure-menu {
+  background-color: rgb(240, 240, 240);
+  float: right;
+  position: fixed;
+  right: 0;
+}
+
+.pure-menu .pure-menu-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-left: 5px solid rgba(0, 0, 0, 0.5);
+}
+
+.custom-restricted-width {
+  /* To limit the menu width to the content of the menu: */
+  display: inline-block;
+  /* Or set the width explicitly: */
+  /* width: 10em; */
+}
+

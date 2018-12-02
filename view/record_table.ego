@@ -1,0 +1,83 @@
+<%
+package view
+
+import (
+  "go-as-admin/util"
+  "log"
+  "reflect"
+  "strconv"
+  "sort"
+  "github.com/aerospike/aerospike-client-go"
+)
+
+type RecordTable struct {
+  OrderedBins []string
+  Bins []string
+  Records *[]*aerospike.Record
+  Page int
+  Offset int
+}
+
+func (r *RecordTable) displayField(fieldValue interface{}) string {
+  valueType := reflect.ValueOf(fieldValue)
+  switch valueType.Kind() {
+  case reflect.String:
+    return fieldValue.(string)
+  case reflect.Int:
+    return strconv.Itoa(fieldValue.(int))
+  default:
+    return "Not string"
+  }
+}
+
+func (r *RecordTable) headers() []string {
+  headersMap := util.Slice2Map(r.OrderedBins,
+    func(k string) (interface{}, error) { return true, nil })
+
+  dedupedBins := make([]string, 0, len(r.Bins))
+  // Remove duplicated headers from Bins
+  for _, bin := range r.Bins {
+    if _, ok := headersMap[bin]; !ok {
+      dedupedBins = append(dedupedBins, bin)
+    }
+  }
+
+  log.Println(dedupedBins)
+  sort.Strings(dedupedBins)
+  return append(r.OrderedBins, dedupedBins...)
+}
+
+func (r *RecordTable) Render(ctx context.Context, w io.Writer) {
+  headers := r.headers()
+%>
+
+  <table class="pure-table pure-table-horizontal">
+    <thead>
+      <tr>
+        <% for _, v := range headers { %>
+          <th><%= v %></th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% for idx, record := range *r.Records { %>
+        <% if idx % 2 == 0 { %>
+          <tr>
+        <% } else { %>
+          <tr class="pure-table-odd">
+        <% } %>
+          <% for _, bin := range headers { %>
+            <td>
+              <% if v, ok := record.Bins[bin]; ok && v != nil { %>
+                <%= r.displayField(v) %>
+              <% } else { %>
+                -
+              <% } %>
+            </td>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+<% } %>

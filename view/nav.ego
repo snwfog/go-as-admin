@@ -1,0 +1,45 @@
+<%
+package view
+
+type Nav struct {
+  ListHeader string
+  ListItems []string
+  Selected string
+  Path string
+  BackPath string
+}
+
+func (r *Nav) Render(ctx context.Context, w io.Writer) {
+%>
+
+  <div class="pure-menu custom-restricted-width">
+    <span class="pure-menu-heading">
+      <%= r.ListHeader %>
+      <span id="menu-hide">[-]</span>
+      <span id="menu-show">[+]</span>
+    </span>
+
+    <% if len(r.BackPath) != 0 { %>
+      <li class="pure-menu-heading">
+        <a href="<%= r.BackPath %>"><< back</a>
+      </li>
+    <% } %>
+
+    <ul class="pure-menu-list">
+
+      <% for _, listItem := range r.ListItems { %>
+      <% if r.Selected == listItem { %>
+        <li class="pure-menu-item pure-menu-selected">
+      <% } else { %>
+        <li class="pure-menu-item">
+      <% } %>
+          <a href="<%= r.Path %><%= listItem %>" class="pure-menu-link">
+            <%= listItem %>
+          </a>
+        </li>
+      <% } %>
+
+    </ul>
+  </div>
+
+<% } %>

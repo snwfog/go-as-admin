@@ -1,0 +1,23 @@
+<%
+package view
+
+func layoutApplication(ctx context.Context, w io.Writer, yield func()) {
+%>
+  <!doctype html>
+    <head>
+      <title>Aerospike Explorer</title>
+      <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+      <link rel="stylesheet" href="/static/pure.min.css" media="screen" rel="stylesheet" type="text/css" />
+      <link rel="stylesheet" href="/static/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+      <script src="/static/jquery.min.js"></script>
+      <script src="/static/application.js"></script>
+    </head>
+  <body>
+    <div class="pure-g">
+      <% yield() %>
+    </div>
+  </body>
+  </html>
+<% } %>

@@ -1,26 +1,20 @@
 <%
 package view
 
-import "github.com/benbjohnson/bootstrap-ego"
-
-type IndexPage struct {}
+type IndexPage struct {
+  Namespaces []string
+}
 
 func (r *IndexPage) Render(ctx context.Context, w io.Writer) {
 %>
-  <!doctype html>
-    <head>
-      <title>Aerospike Explorer</title>
-      <link rel="stylesheet" href="/static/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
-    </head>
-  <body>
-    <bootstrap:Container>
-      <bootstrap:Row>
-        <div class="col-md-3">
-          <bootstrap:Button Style="danger" Size="lg">Don't click me!</bootstrap:Button>
-        </div>
-      </bootstrap:Row>
-    </bootstrap:Container>
-  </body>
-  </html>
+
+  <% layoutApplication(ctx, w, func() { %>
+    <div class="pure-u-1">
+      <ego:Nav ListHeader="namespaces"
+               ListItems=r.Namespaces
+               Path="/_n/" />
+    </div>
+  <% }) %>
+
 <% } %>
 

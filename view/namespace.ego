@@ -1,0 +1,32 @@
+<%
+package view
+
+import "fmt"
+
+type NamespacePage struct {
+  Sets []string
+  Namespace string
+}
+
+func (r *NamespacePage) listHeader() string {
+  return fmt.Sprintf("Ns: %s", r.Namespace)
+}
+
+func (r *NamespacePage) path() string {
+  return fmt.Sprintf("/_n/%s/_s/", r.Namespace)
+}
+
+func (r *NamespacePage) Render(ctx context.Context, w io.Writer) {
+%>
+
+  <% layoutApplication(ctx, w, func() { %>
+    <div class="pure-u-1">
+      <ego:Nav ListHeader=r.listHeader()
+               ListItems=r.Sets
+               Path=r.path()
+               BackPath="/"
+               Selected=r.Namespace />
+    </div>
+  <% }) %>
+
+<% } %>
