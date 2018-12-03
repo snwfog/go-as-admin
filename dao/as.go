@@ -59,12 +59,11 @@ L:
         break L
       }
 
-      // Compute the headers using the first value
-      if len(*headers) == 0 {
-        for bin := range record.Bins {
-          if _, ok := binMap[bin]; !ok {
-            *headers = append(*headers, bin)
-          }
+      // compute bins of records
+      for bin := range record.Bins {
+        if _, ok := binMap[bin]; !ok {
+          binMap[bin] = true
+          *headers = append(*headers, bin)
         }
       }
 

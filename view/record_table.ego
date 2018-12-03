@@ -3,7 +3,6 @@ package view
 
 import (
   "go-as-admin/util"
-  "log"
   "reflect"
   "strconv"
   "sort"
@@ -25,6 +24,8 @@ func (r *RecordTable) displayField(fieldValue interface{}) string {
     return fieldValue.(string)
   case reflect.Int:
     return strconv.Itoa(fieldValue.(int))
+  case reflect.Slice:
+    return "slice"
   default:
     return "Not string"
   }
@@ -42,7 +43,6 @@ func (r *RecordTable) headers() []string {
     }
   }
 
-  log.Println(dedupedBins)
   sort.Strings(dedupedBins)
   return append(r.OrderedBins, dedupedBins...)
 }
