@@ -13,4 +13,4 @@ ego view && go run main.go
 
 Screens
 
-![screen1](/assets/screenshots/screen1.png)
+![screen1](/static/screenshots/screen1.png)
