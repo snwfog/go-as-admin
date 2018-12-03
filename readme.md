@@ -1,5 +1,12 @@
 go-as-admin
 
+Good
+
+- Use 10mb
+
+Bad
+
+- Use scanning, no paging
 
 Install:
 
