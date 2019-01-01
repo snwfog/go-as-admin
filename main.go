@@ -5,15 +5,20 @@ import (
   "fmt"
   "github.com/aerospike/aerospike-client-go"
   "github.com/gorilla/mux"
+  "go-as-admin/config"
   "go-as-admin/dao"
+  _ "go-as-admin/dao"
   "go-as-admin/util"
+  "go-as-admin/view"
   "log"
   "net/http"
   "sort"
+  "strings"
+)
 
-  "go-as-admin/config"
-  _ "go-as-admin/dao"
-  "go-as-admin/view"
+var (
+  QS_FilterKey       = "filter"
+  QS_FilterSeparator = ":"
 )
 
 type Middleware func(http.HandlerFunc) http.HandlerFunc
@@ -93,27 +98,35 @@ func set(w http.ResponseWriter, r *http.Request) {
 
   sort.Strings(sets)
 
-  //binInfo := strings.Join(dao.GetBinsInfo(ns), "")
-  //log.Println("binsInfo", binInfo)
+  // binInfo := strings.Join(dao.GetBinsInfo(ns), "")
+  // log.Println("binsInfo", binInfo)
   //
-  //bins := strings.Split(binInfo, ",")
-  //_, bins = bins[:2], bins[2:]
-  //log.Println("bins", bins)
-  //sort.Strings(bins)
+  // bins := strings.Split(binInfo, ",")
+  // _, bins = bins[:2], bins[2:]
+  // log.Println("bins", bins)
+  // sort.Strings(bins)
 
-  headers := new([]string)
-  records := new([]*aerospike.Record)
-  dao.GetRecords(ns, set, headers, records)
+  var headers []string
+  var records []*aerospike.Record
+  dao.GetRecords(ns, set, &headers, &records)
 
   log.Println(headers)
   log.Println(records)
+
+  if len(r.FormValue(QS_FilterKey)) > 0 {
+    var err error
+    records, err = filterRecords(r, records)
+    if err != nil {
+      log.Println("not filtered", err)
+    }
+  }
 
   setPage := view.SetPage{
     Sets:      sets,
     Namespace: ns,
     Records:   records,
     Set:       set,
-    Bins:      *headers}
+    Bins:      headers}
 
   setPage.Render(nil, w)
 }
@@ -121,6 +134,31 @@ func set(w http.ResponseWriter, r *http.Request) {
 func stats(w http.ResponseWriter, r *http.Request) {
   statsPage := view.StatsPage{}
   statsPage.Render(nil, w)
+}
+
+func filterRecords(r *http.Request, records []*aerospike.Record) ([]*aerospike.Record, error) {
+  filter := r.FormValue(QS_FilterKey)
+  log.Println("Filtering by", filter)
+
+  filters := strings.Split(filter, QS_FilterSeparator)
+  if len(filters) != 2 {
+    return records, errors.New("error wrong filter format")
+  } else {
+    filterKey, filterValue := filters[0], filters[1]
+    records, err := util.Filter(records, func(record *aerospike.Record) (bool, error) {
+      for bin, value := range record.Bins {
+        if bin == filterKey {
+
+          recordValue := fmt.Sprintf("%v", value)
+          return recordValue == filterValue, nil
+        }
+      }
+
+      return false, errors.New("cannot be filtered, bin does not exist")
+    })
+
+    return records, err
+  }
 }
 
 func Logging() Middleware {

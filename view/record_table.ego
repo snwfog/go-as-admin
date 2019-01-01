@@ -12,7 +12,7 @@ import (
 type RecordTable struct {
   OrderedBins []string
   Bins []string
-  Records *[]*aerospike.Record
+  Records []*aerospike.Record
   Page int
   Offset int
 }
@@ -60,7 +60,7 @@ func (r *RecordTable) Render(ctx context.Context, w io.Writer) {
       </tr>
     </thead>
     <tbody>
-      <% for idx, record := range *r.Records { %>
+      <% for idx, record := range r.Records { %>
         <% if idx % 2 == 0 { %>
           <tr>
         <% } else { %>

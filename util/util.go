@@ -1,6 +1,9 @@
 package util
 
-import "log"
+import (
+  "github.com/aerospike/aerospike-client-go"
+  "log"
+)
 
 func PanicOnError(msg string, err error) {
   if err != nil {
@@ -44,4 +47,17 @@ func Map(memo []string, fn func(string) (string, error)) []string {
   }
 
   return slice
+}
+
+func Filter(records []*aerospike.Record, fn func(record *aerospike.Record) (bool, error)) ([]*aerospike.Record, error) {
+  results := make([]*aerospike.Record, 0, len(records))
+  for _, r := range records {
+    if ok, err := fn(r); ok && err == nil {
+      results = append(results, r)
+    } else if err != nil {
+      return records, err
+    }
+  }
+
+  return results, nil
 }

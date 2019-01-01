@@ -11,7 +11,7 @@ type SetPage struct {
   Namespace string
   Set string
   Bins []string
-  Records *[]*aerospike.Record
+  Records []*aerospike.Record
 }
 
 func (r *SetPage) listHeader() string {

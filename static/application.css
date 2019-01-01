@@ -26,6 +26,11 @@
   right: 0;
 }
 
+.pure-menu-list {
+  overflow: scroll;
+  max-height: 450px;
+}
+
 .pure-menu .pure-menu-selected {
   background-color: rgba(0, 0, 0, 0.1);
   border-left: 5px solid rgba(0, 0, 0, 0.5);

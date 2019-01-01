@@ -42,7 +42,7 @@ func GetBinsInfo(namespace string) []string {
   return info(fmt.Sprintf("bins/%s", namespace))()
 }
 
-func GetRecords(namespace, set string, headers *[]string, records *[]*aerospike.Record) []aerospike.Record {
+func GetRecords(namespace, set string, headers *[]string, records *[]*aerospike.Record) {
   recordset, err := client.ScanAll(nil, namespace, set)
 
   if err != nil {
@@ -73,8 +73,6 @@ L:
       log.Println("error reading record set", err)
     }
   }
-
-  return []aerospike.Record{}
 }
 
 func ParseAerospikeInfo(info string) map[string]string {
