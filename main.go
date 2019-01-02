@@ -10,6 +10,7 @@ import (
   _ "go-as-admin/dao"
   "go-as-admin/util"
   "go-as-admin/view"
+  "io/ioutil"
   "log"
   "net/http"
   "sort"
@@ -25,6 +26,8 @@ type Middleware func(http.HandlerFunc) http.HandlerFunc
 
 func init() {
   log.Println("main init")
+  log.SetFlags(0)
+  log.SetOutput(ioutil.Discard)
 }
 
 func main() {
