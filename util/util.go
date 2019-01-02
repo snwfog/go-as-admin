@@ -1,8 +1,13 @@
 package util
 
 import (
+  "errors"
+  "fmt"
   "github.com/aerospike/aerospike-client-go"
   "log"
+  "reflect"
+  "strconv"
+  "strings"
 )
 
 func PanicOnError(msg string, err error) {
@@ -15,6 +20,43 @@ func LogOnError(msg string, err error) {
   if err != nil {
     log.Println(msg, err)
   }
+}
+
+func ToString(fieldValue interface{}) string {
+  valueType := reflect.ValueOf(fieldValue)
+  switch valueType.Kind() {
+  case reflect.String:
+    return fieldValue.(string)
+  case reflect.Int:
+    return strconv.Itoa(fieldValue.(int))
+  case reflect.Slice:
+    if result, err := Join(fieldValue, ","); err != nil {
+      return fmt.Sprintf("%v", err)
+    } else {
+      return result
+    }
+  default:
+    return "Not string"
+  }
+}
+
+func Join(slice interface{}, separator string) (string, error) {
+  fmt.Printf("%T", slice)
+  var results []string
+
+  switch t := slice.(type) {
+  case []string:
+  case []int:
+  case []uint:
+  case []uint8:
+    for _, value := range t {
+      results = append(results, fmt.Sprintf("%v", value))
+    }
+  default:
+    return "", errors.New("failed to transform slice into string")
+  }
+
+  return strings.Join(results, separator), nil
 }
 
 func Slice2Map(memo []string, fn func(string) (interface{}, error)) map[string]interface{} {

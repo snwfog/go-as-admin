@@ -3,8 +3,6 @@ package view
 
 import (
   "go-as-admin/util"
-  "reflect"
-  "strconv"
   "sort"
   "github.com/aerospike/aerospike-client-go"
 )
@@ -15,20 +13,6 @@ type RecordTable struct {
   Records []*aerospike.Record
   Page int
   Offset int
-}
-
-func (r *RecordTable) displayField(fieldValue interface{}) string {
-  valueType := reflect.ValueOf(fieldValue)
-  switch valueType.Kind() {
-  case reflect.String:
-    return fieldValue.(string)
-  case reflect.Int:
-    return strconv.Itoa(fieldValue.(int))
-  case reflect.Slice:
-    return "slice"
-  default:
-    return "Not string"
-  }
 }
 
 func (r *RecordTable) headers() []string {
@@ -69,7 +53,7 @@ func (r *RecordTable) Render(ctx context.Context, w io.Writer) {
           <% for _, bin := range headers { %>
             <td>
               <% if v, ok := record.Bins[bin]; ok && v != nil { %>
-                <%= r.displayField(v) %>
+                <%= util.ToString(v) %>
               <% } else { %>
                 -
               <% } %>
