@@ -1,5 +1,7 @@
 * {
-  font-family: "Inconsolata", sans-serif !important;
+  font-family: "Iosevka Term", "Inconsolata", sans-serif !important;
+  font-size: 12pt;
+  line-height: 1.2;
 }
 
 .pure-g > div {
@@ -24,6 +26,7 @@
   float: right;
   position: fixed;
   right: 0;
+  opacity: 0.3;
 }
 
 .pure-menu-list {
@@ -41,5 +44,11 @@
   display: inline-block;
   /* Or set the width explicitly: */
   /* width: 10em; */
+}
+
+.pure-table tbody td {
+  word-wrap: break-word;
+  max-width: 75em;
+  vertical-align: top;
 }
 

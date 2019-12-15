@@ -3,13 +3,14 @@ package dao
 import (
   "errors"
   "fmt"
-  "github.com/aerospike/aerospike-client-go"
-  aerospikeLog "github.com/aerospike/aerospike-client-go/logger"
   "go-as-admin/config"
   "go-as-admin/util"
   "log"
   "strings"
   "time"
+
+  "github.com/aerospike/aerospike-client-go"
+  aerospikeLog "github.com/aerospike/aerospike-client-go/logger"
 )
 
 var client = initAsClient()

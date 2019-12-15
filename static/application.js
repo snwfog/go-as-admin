@@ -1,7 +1,16 @@
 $(function() {
+  var $menu = $(".pure-menu");
   var $menuHide = $("#menu-hide");
   var $menuShow = $("#menu-show");
   var $menuList = $(".pure-menu-list");
+
+  $menu.on('mouseover', function() {
+    $menu.css('opacity', 1);
+  });
+
+  $menu.on('mouseout', function() {
+    $menu.css('opacity', 0.3);
+  });
 
   $menuHide.click(function() {
     document.cookie = "hide=1; path=/";
